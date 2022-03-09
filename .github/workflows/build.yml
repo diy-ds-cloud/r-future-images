@@ -21,8 +21,6 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: diy-ds-cloud/r-image
-          flavor: |
-            latest=auto
           tags: |
             type=sha
       -
