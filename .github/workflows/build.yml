@@ -16,6 +16,16 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: diy-ds-cloud/r-image
+          flavor: |
+            latest=auto
+          tags: |
+            type=sha
+      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       -
@@ -33,4 +43,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: syoh/r-image:latest
+          tags: diy-ds-cloud/r-image:latest

@@ -34,21 +34,6 @@ services:
       --run-mode scheduler
       --port 11562
       --n-workers 2;
-      start-notebook.sh"
-
-  # rstudio-test:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile-test
-  #   # image: syoh/r-notebook:latest
-  #   image: syoh/r-notebook:b6fdd5dae6cb
-  #   hostname: r-notebook
-  #   ports:
-  #     - "8888:8888"
-  #     - "11562:11562"
-  #   environment:
-  #     - R_PARALLEL_PORT=11562
-  #     - NSLOTS=2
-  #     - RUN_MODE=scheduler
-  #   command: ["start-notebook.sh", "--ServerApp.custom_display_url='http://127.0.0.1:8888/rstudio'"]
-  #   # entrypoint: ["sh", "-c", "echo R_PARALLEL_PORT=11562 >> /opt/conda/lib/R/etc/Renviron && echo NSLOTS=2 >> /opt/conda/lib/R/etc/Renviron"]
+      start-notebook.sh
+      --ServerApp.custom_display_url='http://127.0.0.1:8888/rstudio'
+      "
