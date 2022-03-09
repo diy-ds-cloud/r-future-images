@@ -1,0 +1,54 @@
+version: "3.1"
+
+services:
+
+  r-worker:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: r-worker
+    image: syoh/r-worker:b6fdd5dae6cb
+    command: >
+      bash -c "
+      /opt/conda/bin/future-vars.sh
+      --run-mode worker
+      --scheduler r-notebook
+      --port 11562
+      "
+    deploy:
+      replicas: 2
+
+  rstudio:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: rstudio
+    image: syoh/r-notebook:b6fdd5dae6cb
+    hostname: r-notebook
+    ports:
+      - "8888:8888"
+      - "11562:11562"
+    command: >
+      bash -c "
+      /opt/conda/bin/future-vars.sh
+      --run-mode scheduler
+      --port 11562
+      --n-workers 2;
+      start-notebook.sh"
+
+  # rstudio-test:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile-test
+  #   # image: syoh/r-notebook:latest
+  #   image: syoh/r-notebook:b6fdd5dae6cb
+  #   hostname: r-notebook
+  #   ports:
+  #     - "8888:8888"
+  #     - "11562:11562"
+  #   environment:
+  #     - R_PARALLEL_PORT=11562
+  #     - NSLOTS=2
+  #     - RUN_MODE=scheduler
+  #   command: ["start-notebook.sh", "--ServerApp.custom_display_url='http://127.0.0.1:8888/rstudio'"]
+  #   # entrypoint: ["sh", "-c", "echo R_PARALLEL_PORT=11562 >> /opt/conda/lib/R/etc/Renviron && echo NSLOTS=2 >> /opt/conda/lib/R/etc/Renviron"]
