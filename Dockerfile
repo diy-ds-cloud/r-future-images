@@ -3,7 +3,7 @@
 FROM jupyter/r-notebook:b6fdd5dae6cb AS r-worker
 
 COPY --chown=${NB_UID}:${NB_GID} \
-    future-vars.sh /opt/conda/bin/future-vars.sh
+    etc/future-vars.sh /opt/conda/bin/future-vars.sh
 
 RUN Rscript -e "install.packages(c('future', 'future.apply','doFuture'), repos='http://cran.us.r-project.org')"
 
@@ -42,6 +42,6 @@ RUN mamba clean -tipsy && \
     fix-permissions "/home/${NB_USER}"
 
 COPY --chown=${NB_UID}:${NB_GID} \
-    startup.R ${HOME}/work/
+    scripts/startup.R ${HOME}/work/
 
 USER ${NB_UID}
