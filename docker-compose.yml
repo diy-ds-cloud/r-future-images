@@ -7,12 +7,12 @@ services:
       context: ./
       dockerfile: Dockerfile
       target: r-worker
-    image: syoh/r-worker:b6fdd5dae6cb
+    image: r-future:worker-latest
     command: >
       bash -c "
       /opt/conda/bin/future-vars.sh
       --run-mode worker
-      --scheduler r-notebook
+      --scheduler rstudio
       --port 11562
       "
     deploy:
@@ -23,8 +23,8 @@ services:
       context: ./
       dockerfile: Dockerfile
       target: rstudio
-    image: syoh/r-notebook:b6fdd5dae6cb
-    hostname: r-notebook
+    image: r-future:rstudio-latest
+    hostname: rstudio
     ports:
       - "8888:8888"
       - "11562:11562"
