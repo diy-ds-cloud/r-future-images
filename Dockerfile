@@ -10,6 +10,12 @@ RUN Rscript -e "install.packages(c('future', 'future.apply','doFuture'), repos='
 ####### rstudio
 
 FROM r-worker AS rstudio
+    
+RUN pip install --no-cache-dir \
+        jupyter-server-proxy==3.2.0 \
+        jupyter-rsession-proxy==2.0.1 && \
+    jupyter labextension install @jupyterlab/server-proxy@3.2.0 && \
+    jupyter lab build
 
 USER root
 
@@ -19,16 +25,6 @@ RUN curl --silent -L --fail \
     apt-get install -y --no-install-recommends /tmp/rstudio.deb && \
     rm /tmp/rstudio.deb && \
     apt-get clean
-
-USER ${NB_UID}
-    
-RUN pip install --no-cache-dir \
-        jupyter-server-proxy==3.2.0 \
-        jupyter-rsession-proxy==2.0.1 && \
-    jupyter labextension install @jupyterlab/server-proxy@3.2.0 && \
-    jupyter lab build
-
-USER root
 
 RUN mamba clean -tipsy && \
     jupyter lab clean && \
